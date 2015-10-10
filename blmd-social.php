@@ -5,14 +5,14 @@ Plugin URI: https://github.com/blmd/blmd-social
 Description: Social shares
 Author: blmd
 Author URI: https://github.com/blmd
-Version: 0.4
+Version: 0.5
 
 GitHub Plugin URI: https://github.com/blmd/blmd-social
 
 */
 
 !defined( 'ABSPATH' ) && die;
-define( 'BLMD_SOCIAL_VERSION', '0.4' );
+define( 'BLMD_SOCIAL_VERSION', '0.5' );
 define( 'BLMD_SOCIAL_URL', plugin_dir_url( __FILE__ ) );
 define( 'BLMD_SOCIAL_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BLMD_SOCIAL_BASENAME', plugin_basename( __FILE__ ) );
@@ -812,7 +812,9 @@ class BLMD_Social {
 		}
 
 		foreach ( $networks as $network ) {
-			$classes_button      = apply_filters( 'blmd_social_classes_button', '', $network );
+			$classes_button = apply_filters( 'blmd_social_classes_button', '', $network );
+			$classes_icon   = apply_filters( 'blmd_social_classes_icon', '' );
+			$class_icon     = apply_filters( 'blmd_social_class_icon', 'icon' );
 			// $classes_button_e    = esc_attr( $classes_button );
 			
 			$cnt = !empty( $counts[$network] ) ? (int)$counts[$network] : 0;
@@ -821,7 +823,7 @@ class BLMD_Social {
 			$total_cnt += $cnt;
 
 			$bs = '<div class="wrap">';
-			$bs .= '<a class="%1$s %2$s %3$s" data-network="%4$s" data-count="%5$d" data-count-archived="%6$d" href="%7$s"><span class="icon"><span class="icon-%4$s"></span></span><span class="count">%5$d</span></a>';
+			$bs .= '<a class="%1$s %2$s %3$s" data-network="%4$s" data-count="%5$d" data-count-archived="%6$d" href="%7$s"><span class="icon"><span class="%8$s-%4$s %9$s"></span></span><span class="count">%5$d</span></a>';
 			$bs .= '</div>';
 			$bs = sprintf( $bs,
 				esc_attr( $class_button ),
@@ -830,7 +832,9 @@ class BLMD_Social {
 				esc_attr( $network ),
 				(int)$cnt,
 				(int)$cnt_a,
-				'%1$s'
+				'%1$s',
+				esc_attr( $class_icon ),
+				esc_attr( $classes_icon )
 			);
 
 			switch ( $network ) {
