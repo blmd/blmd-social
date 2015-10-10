@@ -876,6 +876,7 @@ class BLMD_Social {
 		
 		
 		$classes_button      = apply_filters( 'blmd_social_classes_button', '', 'total-count' );
+		$total_shares_text   = apply_filters( 'blmd_social_total_shares_text', 'Total Shares' );
 		$bs = '<div class="wrap">';
 		$bs .= '<span class="%1$s %2$s %3$s" data-total-count="%4$d"><span class="count">%4$d</span><span class="text">%5$s</span></span>';
 		$bs .= '</div>';
@@ -884,7 +885,7 @@ class BLMD_Social {
 			esc_attr( $class_total_count ),
 			esc_attr( $classes_button ),
 			(int)$total_cnt,
-			'Total Shares'
+			esc_html( $total_shares_text )
 		);
 		$buttons[] = $bs;
 		
