@@ -812,6 +812,7 @@ class BLMD_Social {
 		}
 
 		foreach ( $networks as $network ) {
+			$class_network  = apply_filters( 'blmd_social_class_network', $network );
 			$classes_button = apply_filters( 'blmd_social_classes_button', '', $network );
 			$classes_icon   = apply_filters( 'blmd_social_classes_icon', '' );
 			$class_icon     = apply_filters( 'blmd_social_class_icon', 'icon' );
@@ -829,7 +830,7 @@ class BLMD_Social {
 				esc_attr( $class_button ),
 				esc_attr( "{$network}" ),
 				esc_attr( $classes_button ),
-				esc_attr( $network ),
+				esc_attr( $class_network ),
 				(int)$cnt,
 				(int)$cnt_a,
 				'%1$s',
