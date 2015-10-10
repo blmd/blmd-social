@@ -5,14 +5,14 @@ Plugin URI: https://github.com/blmd/blmd-social
 Description: Social shares
 Author: blmd
 Author URI: https://github.com/blmd
-Version: 0.5
+Version: 0.6
 
 GitHub Plugin URI: https://github.com/blmd/blmd-social
 
 */
 
 !defined( 'ABSPATH' ) && die;
-define( 'BLMD_SOCIAL_VERSION', '0.5' );
+define( 'BLMD_SOCIAL_VERSION', '0.6' );
 define( 'BLMD_SOCIAL_URL', plugin_dir_url( __FILE__ ) );
 define( 'BLMD_SOCIAL_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BLMD_SOCIAL_BASENAME', plugin_basename( __FILE__ ) );
@@ -624,7 +624,7 @@ class BLMD_Social {
 		add_action( 'cmb2_admin_init', array( $this, 'cmb2_admin_init' ) );
 
 		add_filter( 'cmb2_meta_box_url', array( $this, 'cmb2_meta_box_url' ));
-		add_filter( 'blmd_social_buttons', array( $this, 'populate_button_set' ));
+		add_action( 'blmd_social_buttons', array( $this, 'populate_button_set' ));
 		
 		add_filter( 'cron_schedules', array( $this, 'cron_schedules' ) );
 
@@ -1099,9 +1099,12 @@ class BLMD_Social {
 		  // twttr.events.bind('favorite', favIntentToAnalytics);
 		  // twttr.events.bind('follow', followIntentToAnalytics);
 		});
+		</script>
+EOS;
+		echo $js;
 
-			</script>
-			
+		if ( is_singular() ) {
+		$js = <<<EOS
 		<script>
 		jQuery(document).ready(function($) {
 			var urls = {
@@ -1143,8 +1146,12 @@ class BLMD_Social {
 				});
 			});
 		});
-
-		
+		</script>
+EOS;
+		echo $js;
+	}
+		$js = <<<EOS
+		<script>
 		jQuery(document).ready(function($) {
 			// if (window.twttr) { return; }
 			$('.$class_main_esc .$class_button:not(.native)').on('click',function(event) {
