@@ -5,14 +5,14 @@ Plugin URI: https://github.com/blmd/blmd-social
 Description: Social shares
 Author: blmd
 Author URI: https://github.com/blmd
-Version: 0.7
+Version: 0.9
 
 GitHub Plugin URI: https://github.com/blmd/blmd-social
 
 */
 
 !defined( 'ABSPATH' ) && die;
-define( 'BLMD_SOCIAL_VERSION', '0.7' );
+define( 'BLMD_SOCIAL_VERSION', '0.9' );
 define( 'BLMD_SOCIAL_URL', plugin_dir_url( __FILE__ ) );
 define( 'BLMD_SOCIAL_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BLMD_SOCIAL_BASENAME', plugin_basename( __FILE__ ) );
@@ -624,7 +624,7 @@ class BLMD_Social {
 		add_action( 'cmb2_admin_init', array( $this, 'cmb2_admin_init' ) );
 
 		add_filter( 'cmb2_meta_box_url', array( $this, 'cmb2_meta_box_url' ));
-		add_filter( 'blmd_social_buttons', array( $this, 'populate_button_set' ));
+		add_action( 'blmd_social_buttons', array( $this, 'populate_button_set' ));
 		
 		add_filter( 'cron_schedules', array( $this, 'cron_schedules' ) );
 
@@ -812,7 +812,10 @@ class BLMD_Social {
 		}
 
 		foreach ( $networks as $network ) {
-			$classes_button      = apply_filters( 'blmd_social_classes_button', '', $network );
+			$class_network  = apply_filters( 'blmd_social_class_network', $network );
+			$classes_button = apply_filters( 'blmd_social_classes_button', '', $network );
+			$classes_icon   = apply_filters( 'blmd_social_classes_icon', '' );
+			$class_icon     = apply_filters( 'blmd_social_class_icon', 'icon' );
 			// $classes_button_e    = esc_attr( $classes_button );
 			
 			$cnt = !empty( $counts[$network] ) ? (int)$counts[$network] : 0;
@@ -821,16 +824,18 @@ class BLMD_Social {
 			$total_cnt += $cnt;
 
 			$bs = '<div class="wrap">';
-			$bs .= '<a class="%1$s %2$s %3$s" data-network="%4$s" data-count="%5$d" data-count-archived="%6$d" href="%7$s"><span class="icon"><span class="icon-%4$s"></span></span><span class="count">%5$d</span></a>';
+			$bs .= '<a class="%1$s %2$s %3$s" data-network="%4$s" data-count="%5$d" data-count-archived="%6$d" href="%7$s"><span class="icon"><span class="%8$s-%4$s %9$s"></span></span><span class="count">%5$d</span></a>';
 			$bs .= '</div>';
 			$bs = sprintf( $bs,
 				esc_attr( $class_button ),
 				esc_attr( "{$network}" ),
 				esc_attr( $classes_button ),
-				esc_attr( $network ),
+				esc_attr( $class_network ),
 				(int)$cnt,
 				(int)$cnt_a,
-				'%1$s'
+				'%1$s',
+				esc_attr( $class_icon ),
+				esc_attr( $classes_icon )
 			);
 
 			switch ( $network ) {
@@ -871,6 +876,7 @@ class BLMD_Social {
 		
 		
 		$classes_button      = apply_filters( 'blmd_social_classes_button', '', 'total-count' );
+		$total_shares_text   = apply_filters( 'blmd_social_total_shares_text', 'Total Shares' );
 		$bs = '<div class="wrap">';
 		$bs .= '<span class="%1$s %2$s %3$s" data-total-count="%4$d"><span class="count">%4$d</span><span class="text">%5$s</span></span>';
 		$bs .= '</div>';
@@ -879,7 +885,7 @@ class BLMD_Social {
 			esc_attr( $class_total_count ),
 			esc_attr( $classes_button ),
 			(int)$total_cnt,
-			'Total Shares'
+			esc_html( $total_shares_text )
 		);
 		$buttons[] = $bs;
 		
@@ -990,6 +996,7 @@ class BLMD_Social {
 			if ( ( $_ = array_search( 'googleplus', $services ) ) !== false ) {
 				$services[$_] = 'google_plus';
 			}
+
 			$options = array();
 			$result = array();
 			if ( ( $result = get_transient( md5( $permalink ) ) ) === false ) {
@@ -1093,9 +1100,12 @@ class BLMD_Social {
 		  // twttr.events.bind('favorite', favIntentToAnalytics);
 		  // twttr.events.bind('follow', followIntentToAnalytics);
 		});
+		</script>
+EOS;
+		echo $js;
 
-			</script>
-			
+		if ( is_singular() ) {
+		$js = <<<EOS
 		<script>
 		jQuery(document).ready(function($) {
 			var urls = {
@@ -1137,8 +1147,12 @@ class BLMD_Social {
 				});
 			});
 		});
-
-		
+		</script>
+EOS;
+		echo $js;
+	}
+		$js = <<<EOS
+		<script>
 		jQuery(document).ready(function($) {
 			// if (window.twttr) { return; }
 			$('.$class_main_esc .$class_button:not(.native)').on('click',function(event) {
@@ -1193,7 +1207,6 @@ BLMD_Social();
 // wpseo_twitter_title
 // wpseo_twitter_description
 // wpseo_twitter_image
-
 
 
 
