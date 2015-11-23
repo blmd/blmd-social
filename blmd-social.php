@@ -49,7 +49,8 @@ abstract class ShareaholicShareCount {
         'callback' => 'facebook_count_callback',
       ),
       'twitter' => array(
-        'url' => 'https://cdn.api.twitter.com/1/urls/count.json?url=%s',
+        // 'url' => 'https://cdn.api.twitter.com/1/urls/count.json?url=%s',
+        'url' => get_option('blmd_social_twitter_counts_url', 'http://localhost.invalid/?url=').'%s',
         'method' => 'GET',
         'timeout' => 3,
         'callback' => 'twitter_count_callback',
@@ -1110,7 +1111,7 @@ EOS;
 		jQuery(document).ready(function($) {
 			var urls = {
 				facebook:  "http://graph.facebook.com/?id={url}&callback=?",
-				twitter: 	 "http://cdn.api.twitter.com/1/urls/count.json?url={url}&callback=?",
+				// twitter: 	 "http://cdn.api.twitter.com/1/urls/count.json?url={url}&callback=?",
 				pinterest: "http://api.pinterest.com/v1/urls/count.json?url={url}&callback=?",
 				linkedin:  "http://www.linkedin.com/countserv/count/share?format=jsonp&url={url}&callback=?"
 			};
