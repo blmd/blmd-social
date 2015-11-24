@@ -1036,7 +1036,30 @@ class BLMD_Social {
 		}	
 	}
 	
-	public function update_share_counts_archived( $num=1000000, $offset=0 ) {
+	protected function get_all_posts( $num=1000000, $offset=0 ) {
+		$args = array(
+			'posts_per_page'   => (int)$num,
+			'offset'           => (int)$offset,
+			'orderby'          => 'date',
+			'order'            => 'DESC',
+			'post_type'        => 'any',
+			'post_status'      => 'publish',
+			'meta_query' => array(
+				'relation' => 'OR',
+				array(
+					'key' => 'blmd_social_counts',
+					'value' => array( '1' ),
+					'compare' => 'IN',
+				)
+			),
+			'suppress_filters' => true
+		);
+		$posts_force = get_posts( $args );
+		$not_in = array();
+		foreach ($posts_force as $p) {
+			$not_in[] = $p->ID;
+		}
+
 		$args = array(
 			'posts_per_page'   => (int)$num,
 			'offset'           => (int)$offset,
@@ -1044,23 +1067,40 @@ class BLMD_Social {
 			'order'            => 'DESC',
 			'post_type'        => 'post',
 			'post_status'      => 'publish',
+			'post__not_in'		=> $not_in,
 			'suppress_filters' => true
 		);
-		$posts    = get_posts( $args );
+		$posts = get_posts( $args );
+		return array_merge((array)$posts, (array)$posts_force);
+	}
+	
+	public function update_share_counts_archived( $num=1000000, $offset=0 ) {
+		// $args = array(
+		// 	'posts_per_page'   => (int)$num,
+		// 	'offset'           => (int)$offset,
+		// 	'orderby'          => 'date',
+		// 	'order'            => 'DESC',
+		// 	'post_type'        => 'post',
+		// 	'post_status'      => 'publish',
+		// 	'suppress_filters' => true
+		// );
+		// $posts = get_posts( $args );
+		$posts = $this->get_all_posts( $num, $offset );
 		$this->update_counts( $posts, 'archive' );
 	}
 	
 	public function update_share_counts( $num=1000000, $offset=0 ) {
-		$args = array(
-			'posts_per_page'   => (int)$num,
-			'offset'           => (int)$offset,
-			'orderby'          => 'date',
-			'order'            => 'DESC',
-			'post_type'        => 'post',
-			'post_status'      => 'publish',
-			'suppress_filters' => true
-		);
-		$posts = get_posts( $args );
+		// $args = array(
+		// 	'posts_per_page'   => (int)$num,
+		// 	'offset'           => (int)$offset,
+		// 	'orderby'          => 'date',
+		// 	'order'            => 'DESC',
+		// 	'post_type'        => 'post',
+		// 	'post_status'      => 'publish',
+		// 	'suppress_filters' => true
+		// );
+		// $posts = get_posts( $args );
+		$posts = $this->get_all_posts( $num, $offset );
 		$this->update_counts( $posts, 'permalink' );
 	}
 	
