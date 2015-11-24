@@ -902,12 +902,20 @@ class BLMD_Social {
 			$buttons_html
 		);
 		if (@$_GET['update_share_counts'] == "yes") {
-			$this->update_share_counts(2);
+			add_action( 'pre_get_posts', array( $this, 'posts_in_filter' ) );
+			$this->update_share_counts( 2 );
+			remove_action( 'pre_get_posts', array( $this, 'posts_in_filter' ) );
 			exit;
 		}
 		add_action('wp_footer', array($this, 'js'));
 		echo $template;
 		return $buttons_html;
+	}
+
+	public function posts_in_filter( $query ) {
+		global $post;
+		if ( empty( $post->ID ) ) { return; }
+		$query->set( 'post__in', array( $post->ID ) );
 	}
 	
 	public function blmd_social_update_counts($type='permalink') {
@@ -1055,7 +1063,7 @@ class BLMD_Social {
 			'suppress_filters' => true
 		);
 		$posts_force = get_posts( $args );
-		$not_in = array();
+		$not_in = array(0);
 		foreach ($posts_force as $p) {
 			$not_in[] = $p->ID;
 		}
