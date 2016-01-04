@@ -816,7 +816,7 @@ class BLMD_Social {
 		}
 
 		foreach ( $networks as $network ) {
-			$summary = apply_filters( "blmd_social_share_summary", $summary );
+			$summary = apply_filters( "blmd_social_share_summary", $summary, $network );
 			
 			$class_network  = apply_filters( 'blmd_social_class_network', $network );
 			$classes_button = apply_filters( 'blmd_social_classes_button', '', $network );
