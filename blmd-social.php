@@ -1007,6 +1007,10 @@ class BLMD_Social {
 
 			$options = array();
 			$result = array();
+			$do_check = apply_filters( 'blmd_social_before_update_counts', $post );
+			if ( !$do_check ) {
+				continue;
+			}
 			if ( ( $result = get_transient( md5( $permalink ) ) ) === false ) {
 				$shares = new ShareaholicCurlMultiShareCount( $permalink, $services, $options );
 				$result = $shares->get_counts();
