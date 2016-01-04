@@ -845,12 +845,12 @@ class BLMD_Social {
 				$buttons[] = sprintf( $bs, esc_url( $url ) );
 				break;
 			case 'facebook':
-				$url = 'http://www.facebook.com/sharer/sharer.php?u=%1$s';
+				$url = 'https://www.facebook.com/sharer/sharer.php?u=%1$s';
 				$url = sprintf( $url, urlencode( $permalink ) );
 				$buttons[] = sprintf( $bs, esc_url( $url ) );
 				break;
 			case 'pinterest':
-				$url = 'http://pinterest.com/pin/create/button/?url=%1$s&media=%2$s&description=%3$s';
+				$url = 'https://pinterest.com/pin/create/button/?url=%1$s&media=%2$s&description=%3$s';
 				$url = sprintf( $url, urlencode( $permalink ), urlencode( $pin_image ), urlencode( $summary ) );
 				$buttons[] = sprintf( $bs, esc_url( $url ) );
 				break;
@@ -865,7 +865,7 @@ class BLMD_Social {
 				$buttons[] = sprintf( $bs, esc_url( $url ) );
 				break;
 			case 'stumbleupon':
-				$url = 'http://www.stumbleupon.com/badge/?url=%1$s';
+				$url = 'https://www.stumbleupon.com/badge/?url=%1$s';
 				$url = sprintf( $url, urlencode( $permalink ) );
 				$buttons[] = sprintf( $bs, esc_url( $url ) );
 				break;
@@ -1161,10 +1161,10 @@ EOS;
 		<script>
 		jQuery(document).ready(function($) {
 			var urls = {
-				facebook:  "http://graph.facebook.com/?id={url}&callback=?",
+				facebook:  "https://graph.facebook.com/?id={url}&callback=?",
 				// twitter: 	 "http://cdn.api.twitter.com/1/urls/count.json?url={url}&callback=?",
-				pinterest: "http://api.pinterest.com/v1/urls/count.json?url={url}&callback=?",
-				linkedin:  "http://www.linkedin.com/countserv/count/share?format=jsonp&url={url}&callback=?"
+				pinterest: "https://api.pinterest.com/v1/urls/count.json?url={url}&callback=?",
+				linkedin:  "https://www.linkedin.com/countserv/count/share?format=jsonp&url={url}&callback=?"
 			};
 			var counts = {};
 			$.each(urls, function(network, url) {
