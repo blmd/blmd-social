@@ -799,6 +799,10 @@ class BLMD_Social {
 			}
 		}
 		
+		$via       = apply_filters( 'blmd_social_network_twitter_via', $via );
+		$pin_id    = apply_filters( 'blmd_social_network_pinterest_id', '' );
+		$pin_image = apply_filters( 'blmd_social_network_pinterest_image', $pin_image );
+	
 		
 		$button_template       = '{icon} {count}';
 		$button_template_total = '{total-count} Total Shares';
@@ -812,6 +816,8 @@ class BLMD_Social {
 		}
 
 		foreach ( $networks as $network ) {
+			$summary = apply_filters( "blmd_social_share_summary", $summary );
+			
 			$class_network  = apply_filters( 'blmd_social_class_network', $network );
 			$classes_button = apply_filters( 'blmd_social_classes_button', '', $network );
 			$classes_icon   = apply_filters( 'blmd_social_classes_icon', '' );
@@ -850,8 +856,8 @@ class BLMD_Social {
 				$buttons[] = sprintf( $bs, esc_url( $url ) );
 				break;
 			case 'pinterest':
-				$url = 'https://pinterest.com/pin/create/button/?url=%1$s&media=%2$s&description=%3$s';
-				$url = sprintf( $url, urlencode( $permalink ), urlencode( $pin_image ), urlencode( $summary ) );
+				$url = 'https://pinterest.com/pin/create/button/?url=%1$s&media=%2$s&description=%3$s&id=%4$s';
+				$url = sprintf( $url, urlencode( $permalink ), urlencode( $pin_image ), urlencode( $summary ), urlencode( $pin_id ) );
 				$buttons[] = sprintf( $bs, esc_url( $url ) );
 				break;
 			case 'linkedin':
