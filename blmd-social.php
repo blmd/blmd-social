@@ -740,7 +740,7 @@ class BLMD_Social {
 		// counts: {twitter: 133, facebook: 34}
 		// counts_archived: {twitter: 999,}
 		$buttons         = array();
-		$networks        = $this->get_option('networks');
+		$networks        = apply_filters('blmd_social_display_networks', $this->get_option('networks'));
 		$counts          = array();
 		$counts_archived = array();
 
