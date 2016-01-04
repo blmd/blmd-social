@@ -624,7 +624,7 @@ class BLMD_Social {
 	protected function setup_actions() {
 		add_action( 'cmb2_admin_init', array( $this, 'cmb2_admin_init' ) );
 
-		add_filter( 'cmb2_meta_box_url', array( $this, 'cmb2_meta_box_url' ));
+		// add_filter( 'cmb2_meta_box_url', array( $this, 'cmb2_meta_box_url' ));
 		add_action( 'blmd_social_buttons', array( $this, 'populate_button_set' ));
 		
 		add_filter( 'cron_schedules', array( $this, 'cron_schedules' ) );
