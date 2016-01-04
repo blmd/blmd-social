@@ -638,22 +638,23 @@ class BLMD_Social {
 		add_action( 'plugins_loaded', function() {
 			if ( ! wp_next_scheduled( 'blmd_social_update_counts' ) ) {
 				wp_schedule_event( time(), 'every5minutes', 'blmd_social_update_counts' );
-				update_option( 'test_wp_cron', 'setting counts '.time() );
+				update_option( 'blmd_social_last_cron', 'setting counts '.date('Y-m-d H:i:s') );
 			}
 
 			if ( ! wp_next_scheduled( 'blmd_social_update_counts', array('archive') ) ) {
 				wp_schedule_event( time(), 'daily', 'blmd_social_update_counts', array('archive') );
-				update_option( 'test_wp_cron', 'setting archived '.time() );
+				update_option( 'blmd_social_last_cron', 'setting archived '.date('Y-m-d H:i:s') );
 			}
 			// wp_clear_scheduled_hook( 'blmd_social_update_counts' );
 			// wp_schedule_single_event( time() + 5, 'blmd_social_update_counts', array( 5, 10, 15 ) );
 
 		} );
 	}
-	public function cmb2_meta_box_url( $url ) {
-		$pd = ( defined( 'WP_PLUGIN_DIR' ) ? WP_PLUGIN_DIR : WP_CONTENT_DIR . '/plugins' ) . '/cmb2/';
-		return is_dir( $pd ) ? WP_PLUGIN_URL . '/cmb2/' : $url;
-	}
+
+	// public function cmb2_meta_box_url( $url ) {
+	// 	$pd = ( defined( 'WP_PLUGIN_DIR' ) ? WP_PLUGIN_DIR : WP_CONTENT_DIR . '/plugins' ) . '/cmb2/';
+	// 	return is_dir( $pd ) ? WP_PLUGIN_URL . '/cmb2/' : $url;
+	// }
 	
 	public function cmb2_admin_init() {
 		$prefix = '_blmd_social_';
@@ -669,24 +670,22 @@ class BLMD_Social {
 			) );
 		$cmb_box_side->add_field( array(
 				'name' => __( 'Pinterest Image', 'cmb2' ),
-				'id'   => $prefix . 'image_vertical',
+				'id'   => apply_filters('blmd_social_image_vertical', $prefix.'image_vertical'),
 				'type' => 'file',
 				'options' => array( 'url' => false, ),
 				// 'description' => 'Best size 736 x 1104px',
 			) );
 
 
-
-
-		$cmb_box = new_cmb2_box( array(
-				'id'           => $prefix . 'metabox',
-				'title'        => __( 'BLMD Social', 'cmb2' ),
-				'object_types' => array( 'post', 'page' ),
-				'context'      => 'normal',
-				'priority'     => 'high',
-				'show_names'   => true, // Show field names on the left
-				// 'closed'       => true,
-			) );
+		// $cmb_box = new_cmb2_box( array(
+		// 		'id'           => $prefix . 'metabox',
+		// 		'title'        => __( 'BLMD Social', 'cmb2' ),
+		// 		'object_types' => array( 'post', 'page' ),
+		// 		'context'      => 'normal',
+		// 		'priority'     => 'high',
+		// 		'show_names'   => true, // Show field names on the left
+		// 		// 'closed'       => true,
+		// 	) );
 
 	}
 	
