@@ -622,6 +622,7 @@ class BLMD_Social {
 	}
 
 	protected function setup_actions() {
+		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
 		add_action( 'cmb2_admin_init', array( $this, 'cmb2_admin_init' ) );
 
 		// add_filter( 'cmb2_meta_box_url', array( $this, 'cmb2_meta_box_url' ));
@@ -650,6 +651,16 @@ class BLMD_Social {
 
 		} );
 	}
+	
+	
+	public function admin_notices() {
+		if ( !get_option( 'blmd_social_twitter_counts_url' ) ) {
+			echo '<div class="error">';
+			echo '<p><strong>BLMD Social error.</strong> For Twitter counts to work, set the option <em>blmd_social_twitter_counts_url</em>.</p>';
+			echo '</div>';
+		}
+	}
+	
 
 	// public function cmb2_meta_box_url( $url ) {
 	// 	$pd = ( defined( 'WP_PLUGIN_DIR' ) ? WP_PLUGIN_DIR : WP_CONTENT_DIR . '/plugins' ) . '/cmb2/';
