@@ -617,6 +617,7 @@ class BLMD_Social {
 		if ( ! ( $instance instanceof self ) ) {
 			$instance = new self;
 			$instance->setup_actions();
+			$instance->setup_filters();
 		}
 		return $instance;
 	}
@@ -624,18 +625,8 @@ class BLMD_Social {
 	protected function setup_actions() {
 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
 		add_action( 'cmb2_admin_init', array( $this, 'cmb2_admin_init' ) );
-
-		// add_filter( 'cmb2_meta_box_url', array( $this, 'cmb2_meta_box_url' ));
 		add_action( 'blmd_social_buttons', array( $this, 'populate_button_set' ));
-		
-		add_filter( 'cron_schedules', array( $this, 'cron_schedules' ) );
-
-		add_filter('blmd_social_classes_button', function($classes, $network=null) {
-			if ($network == 'twitter') { $classes .= ' native'; }
-			return $classes;
-		}, 10, 2);
-
-		add_action('blmd_social_update_counts', array($this, 'blmd_social_update_counts'), 10, 3);
+		add_action( 'blmd_social_update_counts', array( $this, 'blmd_social_update_counts' ), 10, 3 );
 		add_action( 'plugins_loaded', function() {
 			if ( ! wp_next_scheduled( 'blmd_social_update_counts' ) ) {
 				wp_schedule_event( time(), 'every5minutes', 'blmd_social_update_counts' );
@@ -652,7 +643,15 @@ class BLMD_Social {
 		} );
 	}
 	
-	
+	protected function setup_filters() {
+		// add_filter( 'cmb2_meta_box_url', array( $this, 'cmb2_meta_box_url' ));
+		add_filter( 'cron_schedules', array( $this, 'cron_schedules' ) );
+		add_filter('blmd_social_classes_button', function($classes, $network=null) {
+			if ($network == 'twitter') { $classes .= ' native'; }
+			return $classes;
+		}, 10, 2);
+		
+	}	
 	public function admin_notices() {
 		if ( !get_option( 'blmd_social_twitter_counts_url' ) ) {
 			echo '<div class="error">';
@@ -660,7 +659,6 @@ class BLMD_Social {
 			echo '</div>';
 		}
 	}
-	
 
 	// public function cmb2_meta_box_url( $url ) {
 	// 	$pd = ( defined( 'WP_PLUGIN_DIR' ) ? WP_PLUGIN_DIR : WP_CONTENT_DIR . '/plugins' ) . '/cmb2/';
@@ -719,13 +717,13 @@ class BLMD_Social {
 	}
 	
 	public function populate_button_set( $args ) {
-		$defaults = array(
-			'ID' => null,
+		$defaults   = array(
+			'ID'       => null,
 			'position' => null,
 			'networks' => array(),
-			'css_id' => null,
+			'css_id'   => null,
 		);
-		$args = wp_parse_args($args, $defaults);
+		$args = wp_parse_args( $args, $defaults );
 		global $post;
 		$_post = $args['ID'] ? get_post( (int)$args['ID'] ) : $post;
 		if ( empty( $_post->ID ) ) { return; }
@@ -755,24 +753,22 @@ class BLMD_Social {
 		$counts          = array();
 		$counts_archived = array();
 
-		$total_cnt             = 0;
-		$count_min             = 1000;
-		$image = null;
+		$total_cnt = 0;
+		$count_min = 1000;
+		$image     = null;
 		$pin_image = null;
-		if (current_theme_supports('post-thumbnails')) {
-			$image = wp_get_attachment_image_src( get_post_thumbnail_id($_post->ID), 'full' );
-			$image = is_array($image) ? $image[0] : null;
-			$pin_image = wp_get_attachment_image_src( get_post_thumbnail_id($_post->ID), 'post-feature-vertical' );
+		
+		if ( current_theme_supports( 'post-thumbnails' ) ) {
+			$image = wp_get_attachment_image_src( get_post_thumbnail_id( $_post->ID ), 'full' );
+			$image = is_array( $image ) ? $image[0] : null;
+			$pin_image = wp_get_attachment_image_src( get_post_thumbnail_id( $_post->ID ), 'post-feature-vertical' );
 			// make sure we didnt just get back original, pin_image[3] == false if so
-			$pin_image = is_array($pin_image) && $pin_image[3]!==false ? $pin_image[0] : null;
-		}	
+			$pin_image = is_array( $pin_image ) && $pin_image[3]!==false ? $pin_image[0] : null;
+		}
 
-		if (class_exists('WPSEO_Meta')) {
-      $og_image = WPSEO_Meta::get_value( 'opengraph-image' );
-      if (!empty($og_image)) {
-        $image = $og_image;
-      }
-    }
+		if ( class_exists( 'WPSEO_Meta' ) && $_ = WPSEO_Meta::get_value( 'opengraph-image' ) ) {
+			$image = $_;
+		}
 
 		if ( $_ = get_post_meta( $_post->ID, '_blmd_social_image_vertical', true ) ) {
 			$pin_image = $_;
@@ -802,10 +798,10 @@ class BLMD_Social {
 				$via = str_replace( '@', '', $via );
 			}
 		}
-		
+
 		$_ = get_the_author_meta( 'twitter', $_post->post_autho );
 		if ( $_ && preg_match( '`([A-Za-z0-9_]{1,25})$`', $_, $matches ) ) {
-			if ($via != $matches[1]) {
+			if ( $via != $matches[1] ) {
 				$via .= ( $via ? ' @' : '' ).$matches[1];
 			}
 		}
