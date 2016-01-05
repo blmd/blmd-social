@@ -863,8 +863,14 @@ class BLMD_Social {
 				$buttons[] = sprintf( $bs, esc_url( $url ) );
 				break;
 			case 'pinterest':
-				$url = 'https://pinterest.com/pin/create/button/?url=%1$s&media=%2$s&description=%3$s&id=%4$s';
-				$url = sprintf( $url, urlencode( $permalink ), urlencode( $pin_image ), urlencode( $summary ), urlencode( $pin_id ) );
+				if ( !empty( $pin_id ) ) {
+					$url = 'https://www.pinterest.com/pin/'.urlencode( $pin_id ).'/repin/x/?id=%1$s';
+					$url = sprintf( $url, urlencode( $pin_id ) );
+				}
+				else {
+					$url = 'https://pinterest.com/pin/create/button/?url=%1$s&media=%2$s&description=%3$s';
+					$url = sprintf( $url, urlencode( $permalink ), urlencode( $pin_image ), urlencode( $summary ) );
+				}
 				$buttons[] = sprintf( $bs, esc_url( $url ) );
 				break;
 			case 'linkedin':
