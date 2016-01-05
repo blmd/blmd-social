@@ -1062,8 +1062,8 @@ class BLMD_Social {
 	
 	protected function get_all_posts( $num=1000000, $offset=0 ) {
 		$args = array(
-			'posts_per_page'   => (int)$num,
-			'offset'           => (int)$offset,
+			'posts_per_page'   => 1000000,
+			'offset'           => 0,
 			'orderby'          => 'date',
 			'order'            => 'DESC',
 			'post_type'        => 'any',
