@@ -686,17 +686,25 @@ class BLMD_Social {
 			) );
 
 
-		// $cmb_box = new_cmb2_box( array(
-		// 		'id'           => $prefix . 'metabox',
-		// 		'title'        => __( 'BLMD Social', 'cmb2' ),
-		// 		'object_types' => array( 'post', 'page' ),
-		// 		'context'      => 'normal',
-		// 		'priority'     => 'high',
-		// 		'show_names'   => true, // Show field names on the left
-		// 		// 'closed'       => true,
-		// 	) );
+		$cmb_box = new_cmb2_box( array(
+				'id'           => $prefix . 'metabox',
+				'title'        => __( 'BLMD Social', 'cmb2' ),
+				'object_types' => array( 'post', 'page' ),
+				'context'      => 'normal',
+				'priority'     => 'high',
+				'show_names'   => true, // Show field names on the left
+				// 'closed'       => true,
+			) );
+		$cmb_box->add_field( array(
+				'name' => __( 'Pinterest PinID', 'cmb2' ),
+				'id'   => $prefix.'pinterest_pin_id',
+				'type' => 'text',
+				'sanitization_cb' => array($this, 'pinterest_pinid_cb'),
+			) );
 
 	}
+	
+	public function pinterest_pinid_cb($val) { return preg_replace('~^([^\d]*)|([^\d]*)$~','',$val); }
 	
 	public function get_options() {
 		static $options;
@@ -718,12 +726,16 @@ class BLMD_Social {
 	
 	public function populate_button_set( $args ) {
 		$defaults   = array(
-			'ID'       => null,
-			'position' => null,
-			'networks' => array(),
-			'css_id'   => null,
+			'ID'        => null,
+			'position'  => null,
+			'networks'  => array(),
+			'css_id'    => null,
+			'container' => 'div',
+			'before'    => '<div class="wrap">',
+			'after'     => '</div>',
 		);
 		$args = wp_parse_args( $args, $defaults );
+		if ( !in_array( $args['container'], array( 'div', 'ul', 'nav', 'section' ) ) ) { $args['container'] = 'div';}
 		global $post;
 		$_post = $args['ID'] ? get_post( (int)$args['ID'] ) : $post;
 		if ( empty( $_post->ID ) ) { return; }
@@ -807,7 +819,8 @@ class BLMD_Social {
 		}
 		
 		$via       = apply_filters( 'blmd_social_network_twitter_via', $via );
-		$pin_id    = apply_filters( 'blmd_social_network_pinterest_id', '' );
+		$pin_id    = (string)get_post_meta( $_post->ID, '_blmd_social_pinterest_pin_id', true );
+		$pin_id    = apply_filters( 'blmd_social_network_pinterest_id', $pin_id );
 		$pin_image = apply_filters( 'blmd_social_network_pinterest_image', $pin_image );
 	
 		
@@ -836,9 +849,9 @@ class BLMD_Social {
 			$cnt += $cnt_a;
 			$total_cnt += $cnt;
 
-			$bs = '<div class="wrap">';
+			$bs = $args['before'];
 			$bs .= '<a class="%1$s %2$s %3$s" data-network="%4$s" data-count="%5$d" data-count-archived="%6$d" href="%7$s"><span class="icon"><span class="%8$s-%4$s %9$s"></span></span><span class="count">%5$d</span></a>';
-			$bs .= '</div>';
+			$bs .= $args['after'];
 			$bs = sprintf( $bs,
 				esc_attr( $class_button ),
 				esc_attr( "{$network}" ),
@@ -896,9 +909,9 @@ class BLMD_Social {
 		
 		$classes_button      = apply_filters( 'blmd_social_classes_button', '', 'total-count' );
 		$total_shares_text   = apply_filters( 'blmd_social_total_shares_text', 'Total Shares' );
-		$bs = '<div class="wrap">';
+		$bs = $args['before'];
 		$bs .= '<span class="%1$s %2$s %3$s" data-total-count="%4$d"><span class="count">%4$d</span><span class="text">%5$s</span></span>';
-		$bs .= '</div>';
+		$bs .= $args['after'];
 		$bs = sprintf( $bs,
 			'',//esc_attr( $class_button ),
 			esc_attr( $class_total_count ),
@@ -909,9 +922,10 @@ class BLMD_Social {
 		$buttons[] = $bs;
 		
 		$buttons_html = join( "\n", $buttons );
-		$template = sprintf( '<div id="%1$s" class="%2$s %3$s" data-count-min="%4$d" data-total-count="%5$s">
-					%6$s
+		$template = sprintf( '<%1$s id="%2$s" class="%3$s %4$s" data-count-min="%5$d" data-total-count="%6$s">
+					%7$s
 			</div>',
+			esc_attr( $args['container'] ),
 			esc_attr( $args['css_id'] ), //esc_attr( $id_main ),
 			esc_attr( $class_main ),
 			esc_attr( $classes_main ),
