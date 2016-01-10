@@ -735,7 +735,7 @@ class BLMD_Social {
 			'after'     => '</div>',
 		);
 		$args = wp_parse_args( $args, $defaults );
-		if ( !in_array( $args['container'], array( 'div', 'ul', 'nav', 'section' ) ) ) { $args['container'] = 'div';}
+		if ( !in_array( $args['container'], array( 'div', 'ul', 'nav', 'section', 'p' ) ) ) { $args['container'] = 'div';}
 		global $post;
 		$_post = $args['ID'] ? get_post( (int)$args['ID'] ) : $post;
 		if ( empty( $_post->ID ) ) { return; }
