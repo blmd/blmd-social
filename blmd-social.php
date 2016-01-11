@@ -733,6 +733,7 @@ class BLMD_Social {
 			'container' => 'div',
 			'before'    => '<div class="wrap">',
 			'after'     => '</div>',
+			'echo'			=> true,
 		);
 		$args = wp_parse_args( $args, $defaults );
 		if ( !in_array( $args['container'], array( 'div', 'ul', 'nav', 'section', 'p' ) ) ) { $args['container'] = 'div';}
@@ -940,8 +941,8 @@ class BLMD_Social {
 			exit;
 		}
 		add_action('wp_footer', array($this, 'js'));
-		echo $template;
-		return $buttons_html;
+		if ( $args['echo'] ) { echo $template; }
+		return $template;
 	}
 
 	public function posts_in_filter( $query ) {
