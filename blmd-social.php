@@ -925,14 +925,15 @@ class BLMD_Social {
 		$buttons_html = join( "\n", $buttons );
 		$template = sprintf( '<%1$s id="%2$s" class="%3$s %4$s" data-count-min="%5$d" data-total-count="%6$s">
 					%7$s
-			</div>',
+			</%8$s>',
 			esc_attr( $args['container'] ),
 			esc_attr( $args['css_id'] ), //esc_attr( $id_main ),
 			esc_attr( $class_main ),
 			esc_attr( $classes_main ),
 			(int)$count_min,
 			(int)$total_cnt,
-			$buttons_html
+			$buttons_html,
+			esc_attr( $args['container'] )
 		);
 		if (@$_GET['update_share_counts'] == "yes") {
 			add_action( 'pre_get_posts', array( $this, 'posts_in_filter' ) );
