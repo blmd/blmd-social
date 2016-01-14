@@ -849,9 +849,11 @@ class BLMD_Social {
 			$cnt_a = !empty( $counts_archived[$network] ) ? (int)$counts_archived[$network] : 0;
 			$cnt += $cnt_a;
 			$total_cnt += $cnt;
+			$cnt_formatted = self::get_compact_number( $cnt, $network );
+			$total_cnt_formatted = self::get_compact_number( $total_cnt );
 
 			$bs = $args['before'];
-			$bs .= '<a class="%1$s %2$s %3$s" data-network="%4$s" data-count="%5$d" data-count-archived="%6$d" href="%7$s"><span class="icon"><span class="%8$s-%4$s %9$s"></span></span><span class="count">%5$d</span></a>';
+			$bs .= '<a class="%1$s %2$s %3$s" data-network="%4$s" data-count="%5$d" data-count-archived="%6$d" href="%7$s"><span class="icon"><span class="%8$s-%4$s %9$s"></span></span><span class="count">%10$d</span></a>';
 			$bs .= $args['after'];
 			$bs = sprintf( $bs,
 				esc_attr( $class_button ),
@@ -862,7 +864,8 @@ class BLMD_Social {
 				(int)$cnt_a,
 				'%1$s',
 				esc_attr( $class_icon ),
-				esc_attr( $classes_icon )
+				esc_attr( $classes_icon ),
+				esc_html( $cnt_formatted )
 			);
 
 			switch ( $network ) {
@@ -911,13 +914,14 @@ class BLMD_Social {
 		$classes_button      = apply_filters( 'blmd_social_classes_button', '', 'total-count' );
 		$total_shares_text   = apply_filters( 'blmd_social_total_shares_text', 'Total Shares' );
 		$bs = $args['before'];
-		$bs .= '<span class="%1$s %2$s %3$s" data-total-count="%4$d"><span class="count">%4$d</span><span class="text">%5$s</span></span>';
+		$bs .= '<span class="%1$s %2$s %3$s" data-total-count="%4$d"><span class="count">%5$d</span><span class="text">%6$s</span></span>';
 		$bs .= $args['after'];
 		$bs = sprintf( $bs,
 			'',//esc_attr( $class_button ),
 			esc_attr( $class_total_count ),
 			esc_attr( $classes_button ),
 			(int)$total_cnt,
+			esc_html( $total_cnt_formatted ),
 			esc_html( $total_shares_text )
 		);
 		$buttons[] = $bs;
@@ -991,7 +995,7 @@ class BLMD_Social {
 
 		if ( 1000000 <= $full_number ) {
 			$full_number = floor( $full_number / 100000 ) / 10;
-			$full_number .= 'Mil';
+			$full_number .= 'M';
 		} elseif ( 1000 < $full_number ) {
 			$full_number = floor( $full_number / 100 ) / 10;
 			$full_number .= 'k';
@@ -1010,8 +1014,8 @@ class BLMD_Social {
 		if ( false !== strrpos( $compact_number, 'k' ) ) {
 			$compact_number = floatval( str_replace( 'k', '', $compact_number ) ) * 1000;
 		}
-		if ( false !== strrpos( $compact_number, 'Mil' ) ) {
-			$compact_number = floatval( str_replace( 'Mil', '', $compact_number ) ) * 1000000;
+		if ( false !== strrpos( $compact_number, 'M' ) ) {
+			$compact_number = floatval( str_replace( 'M', '', $compact_number ) ) * 1000000;
 		}
 
 		return $compact_number;
@@ -1191,10 +1195,20 @@ class BLMD_Social {
 EOS;
 		echo $js;
 
-		if ( is_singular() ) {
+		// if ( is_singular() ) {
+		if ( false ) {
 		$js = <<<EOS
 		<script>
+		
 		jQuery(document).ready(function($) {
+			
+			// $('.$class_main_esc .$class_button').on('click',function(event) {
+			// 		var data = $(this).data();
+			// 		var c = (data.countArchived || 0) + (data.count || 0);
+			// 		var cf = c > 999 ? (c/1000).toFixed(1) + 'k' : c;
+			// });
+			
+			
 			var urls = {
 				facebook:  "https://graph.facebook.com/?id={url}&callback=?",
 				// twitter: 	 "http://cdn.api.twitter.com/1/urls/count.json?url={url}&callback=?",
