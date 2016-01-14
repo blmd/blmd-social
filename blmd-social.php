@@ -987,6 +987,7 @@ class BLMD_Social {
 	// }
 	
 	public static function get_compact_number( $full_number, $network = '' ) {
+		return $full_number;
 		$onum = $full_number;
 		$full_number = (int)$full_number;
 		error_log('formatting: '.$full_number);
