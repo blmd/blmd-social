@@ -853,7 +853,7 @@ class BLMD_Social {
 			$total_cnt_formatted = self::get_compact_number( $total_cnt );
 
 			$bs = $args['before'];
-			$bs .= '<a class="%1$s %2$s %3$s" data-network="%4$s" data-count="%5$d" data-count-archived="%6$d" href="%7$s"><span class="icon"><span class="%8$s-%4$s %9$s"></span></span><span class="count">%10$d</span></a>';
+			$bs .= '<a class="%1$s %2$s %3$s" data-network="%4$s" data-count="%5$d" data-count-archived="%6$d" href="%7$s"><span class="icon"><span class="%8$s-%4$s %9$s"></span></span><span class="count">%10$s</span></a>';
 			$bs .= $args['after'];
 			$bs = sprintf( $bs,
 				esc_attr( $class_button ),
@@ -914,7 +914,7 @@ class BLMD_Social {
 		$classes_button      = apply_filters( 'blmd_social_classes_button', '', 'total-count' );
 		$total_shares_text   = apply_filters( 'blmd_social_total_shares_text', 'Total Shares' );
 		$bs = $args['before'];
-		$bs .= '<span class="%1$s %2$s %3$s" data-total-count="%4$d"><span class="count">%5$d</span><span class="text">%6$s</span></span>';
+		$bs .= '<span class="%1$s %2$s %3$s" data-total-count="%4$d"><span class="count">%5$s</span><span class="text">%6$s</span></span>';
 		$bs .= $args['after'];
 		$bs = sprintf( $bs,
 			'',//esc_attr( $class_button ),
@@ -987,15 +987,11 @@ class BLMD_Social {
 	// }
 	
 	public static function get_compact_number( $full_number, $network = '' ) {
-		return $full_number;
-		$onum = $full_number;
-		$full_number = (int)$full_number;
-		error_log('formatting: '.$full_number);
 		$prefix = '';
 
-		// if ( 10000 == $full_number && 'googleplus' == $network ) {
-		// 	$prefix = '&gt;';
-		// }
+		if ( 10000 == $full_number && 'googleplus' == $network ) {
+			$prefix = '&gt;';
+		}
 
 		if ( 1000000 <= $full_number ) {
 			$full_number = floor( $full_number / 100000 ) / 10;
@@ -1004,9 +1000,7 @@ class BLMD_Social {
 			$full_number = floor( $full_number / 100 ) / 10;
 			$full_number .= 'k';
 		}
-		error_log('formatted: '.$prefix.$full_number);
-		return $onun;
-		// return (string)$prefix.$full_number;
+		return (string)$prefix.$full_number;
 	}
 
 	public static function get_full_number( $compact_number ) {
