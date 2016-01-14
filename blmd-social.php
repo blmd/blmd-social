@@ -1005,8 +1005,8 @@ class BLMD_Social {
 			$full_number .= 'k';
 		}
 		error_log('formatted: '.$prefix.$full_number);
-		return (string)$prefix.$full_number;
-		// return $onun;
+		return $onun;
+		// return (string)$prefix.$full_number;
 	}
 
 	public static function get_full_number( $compact_number ) {
