@@ -987,6 +987,7 @@ class BLMD_Social {
 	// }
 	
 	public static function get_compact_number( $full_number, $network = '' ) {
+		return $full_number;
 		$prefix = '';
 
 		if ( 10000 == $full_number && 'googleplus' == $network ) {
