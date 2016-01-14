@@ -987,15 +987,15 @@ class BLMD_Social {
 	// }
 	
 	public static function get_compact_number( $full_number, $network = '' ) {
-		return $full_number;
+		// return $full_number;
 		$onum = $full_number;
 		$full_number = (int)$full_number;
 		error_log('formatting: '.$full_number);
 		$prefix = '';
 
-		if ( 10000 == $full_number && 'googleplus' == $network ) {
-			$prefix = '&gt;';
-		}
+		// if ( 10000 == $full_number && 'googleplus' == $network ) {
+		// 	$prefix = '&gt;';
+		// }
 
 		if ( 1000000 <= $full_number ) {
 			$full_number = floor( $full_number / 100000 ) / 10;
@@ -1005,8 +1005,8 @@ class BLMD_Social {
 			$full_number .= 'k';
 		}
 		error_log('formatted: '.$prefix.$full_number);
-		return $onun;
-		// return $prefix . $full_number;
+		return (string)$prefix.$full_number;
+		// return $onun;
 	}
 
 	public static function get_full_number( $compact_number ) {
