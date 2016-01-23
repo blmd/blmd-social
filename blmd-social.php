@@ -946,6 +946,8 @@ class BLMD_Social {
 			exit;
 		}
 		add_action('wp_footer', array($this, 'js'));
+		// Remove whitespace for inline-block
+		$template = preg_replace( '~>\\s+<~m', '><', $template );
 		if ( $args['echo'] ) { echo $template; }
 		return $template;
 	}
