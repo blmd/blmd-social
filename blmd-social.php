@@ -1301,7 +1301,7 @@ EOS;
 		), $atts );
 		$prefix      = trim( apply_filters( 'blmd_share_button_prefix', 'blmd' ) );
 		$classes_btn = apply_filters( 'blmd_share_button_classes', '' );
-		$prefix_e    = esc_attr( $prefix_e );
+		$prefix_e    = esc_attr( $prefix );
 		$html = '';
 		if ($atts['type'] == 'twitter') {
 			$html = sprintf( '<button type="button" class="%1$s %2$s %3$s" style="background-color: #55acee; color: #fff;" data-url="%4$s" data-text="%5$s" data-via="%6$s"><span class="icon-twitter"></span>%7$s</button>',
