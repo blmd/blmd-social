@@ -1329,6 +1329,7 @@ EOS;
 		static $done = false;
 		if ( $html && !$done ) {
 			add_action('wp_footer', function() use ($prefix) {
+				$prefix_e = esc_attr( $prefix );
 			?>
 			<script>
 			jQuery(document).ready(function($) {
