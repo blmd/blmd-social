@@ -1304,7 +1304,7 @@ EOS;
 		$prefix_e    = esc_attr( $prefix );
 		$html = '';
 		if ($atts['type'] == 'twitter') {
-			$html = sprintf( '<button type="button" class="%1$s %2$s %3$s" style="background-color: #55acee; color: #fff;" data-url="%4$s" data-text="%5$s" data-via="%6$s"><span class="icon-twitter"></span>%7$s</button>',
+			$html = sprintf( '<button type="button" class="%1$s %2$s %3$s" style="background-color: #55acee; color: #fff; cursor: pointer;" data-url="%4$s" data-text="%5$s" data-via="%6$s"><span class="icon-twitter"></span>%7$s</button>',
 				esc_attr( "{$prefix}-share-button" ),
 				esc_attr( "{$prefix}-share-button-twitter" ),
 				esc_attr( $classes_btn ),
@@ -1315,7 +1315,7 @@ EOS;
 			);
 		}
 		elseif ($atts['type'] == 'facebook') {
-			$html = sprintf('<button type="button" class="%1$s %2$s %3$s" style="background-color: #3b5998; color: #fff;" data-url="%4$s" data-text="%5$s" data-via="%6$s"><span class="icon-facebook"></span>%7$s</button>',
+			$html = sprintf('<button type="button" class="%1$s %2$s %3$s" style="background-color: #3b5998; color: #fff; cursor: pointer;" data-url="%4$s" data-text="%5$s" data-via="%6$s"><span class="icon-facebook"></span>%7$s</button>',
 			esc_attr( "{$prefix}-share-button" ),
 			esc_attr( "{$prefix}-share-button-facebook" ),
 			esc_attr( $classes_btn ),
