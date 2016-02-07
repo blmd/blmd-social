@@ -618,6 +618,7 @@ class BLMD_Social {
 			$instance = new self;
 			$instance->setup_actions();
 			$instance->setup_filters();
+			$instance->setup_shortcodes();
 		}
 		return $instance;
 	}
@@ -650,8 +651,16 @@ class BLMD_Social {
 			if ($network == 'twitter') { $classes .= ' native'; }
 			return $classes;
 		}, 10, 2);
-		
 	}	
+
+	protected function setup_shortcodes() {
+		// add_filter( 'blmd_share_button_prefix', function() { return 'ec'; } );
+		if ( shortcode_exists( 'blmd_share_button' ) ) {
+			remove_shortcode( 'blmd_share_button' );
+		}
+		add_shortcode( 'blmd_share_button', array( $this, 'share_button_shortcode' ) );
+	}
+
 	public function admin_notices() {
 		if ( !get_option( 'blmd_social_twitter_counts_url' ) ) {
 			echo '<div class="error">';
@@ -1281,6 +1290,90 @@ EOS;
 EOS;
 	echo $js;
 	}
+
+	public function share_button_shortcode( $atts ) {
+		$atts = shortcode_atts( array(
+			'type'        => '',
+			'button_text' => '',
+			'url'         => '',
+			'text'        => '',
+			'via'         => '',
+		), $atts );
+		$prefix   = trim( apply_filters( 'blmd_share_button_prefix', 'blmd' ) );
+		$prefix_e = esc_attr( $prefix_e );
+		$html = '';
+		if ($atts['type'] == 'twitter') {
+			$html = sprintf( '<button type="button" class="%1$s %2$s" style="background-color: #55acee; color: #fff;" data-url="%3$s" data-text="%4$s" data-via="%5$s"><span class="icon-twitter"></span>%6$s</button>',
+				esc_attr( "{$prefix}-share-button" ),
+				esc_attr( "{$prefix}-share-button-twitter" ),
+				esc_attr( $atts['url'] ),
+				esc_attr( $atts['text'] ),
+				esc_attr( $atts['via'] ),
+				esc_html( $atts['button_text'] ? $atts['button_text'] : 'Share on Twitter' )
+			);
+		}
+		elseif ($atts['type'] == 'facebook') {
+			$html = sprintf('<button type="button" class="%1$s %2$s" style="background-color: #3b5998; color: #fff;" data-url="%3$s" data-text="%4$s" data-via="%5$s"><span class="icon-facebook"></span>%6$s</button>',
+			esc_attr( "{$prefix}-share-button" ),
+			esc_attr( "{$prefix}-share-button-facebook" ),
+			esc_attr( $atts['url'] ),
+			esc_attr( $atts['text'] ),
+			esc_attr( $atts['via'] ),
+			esc_html( $atts['button_text'] ? $atts['button_text'] : 'Share on Facebook' )
+		);
+		}
+	
+		static $done = false;
+		if ( $html && !$done ) {
+			add_action('wp_footer', function() use ($prefix) {
+			?>
+			<script>
+			jQuery(document).ready(function($) {
+
+				$(".<?=$prefix_e?>-share-button-twitter").each(function() {
+					try {
+						var via = ($(this).data("via")
+												? $(this).data("via")
+												: $('meta[name="twitter:site"]').attr("content")
+													? $('meta[name="twitter:site"]').attr("content")
+													: '').replace('@','');
+						var u = $(this).data("url")
+													? $(this).data("url")
+													: $('link[rel="canonical"]').attr("href")
+														? $('link[rel="canonical"]').attr("href")
+														: window.location.href;
+						var url = "https://twitter.com/intent/tweet?";
+						url += "text=" + encodeURIComponent($(this).data("text"));
+						url += "&url=" + encodeURIComponent(u);
+						url += "&via=" + encodeURIComponent(via);
+						$(this).click(function() { window.open(url, "", "toolbar=0, status=0, width=650, height=360"); });
+					} catch (e) { console.log(e); }
+				});
+
+				$(".<?=$prefix_e?>-share-button-facebook").each(function() {
+					try {
+						var u = $(this).data("url")
+													? $(this).data("url")
+													: $('link[rel="canonical"]').attr("href")
+														? $('link[rel="canonical"]').attr("href")
+														: window.location.href;
+						var url = "http://www.facebook.com/sharer/sharer.php?";
+						url += "u=" + encodeURIComponent(u);
+						$(this).click(function() { window.open(url, "", "toolbar=0, status=0, width=650, height=360"); });
+					} catch (e) { console.log(e); }
+				});
+
+			});
+			</script>
+			<?php
+			});
+			$done = true;
+		}
+			return $html;
+	}
+
+
+
 
 	
 	public function __construct() { }
