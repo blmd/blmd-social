@@ -1299,13 +1299,15 @@ EOS;
 			'text'        => '',
 			'via'         => '',
 		), $atts );
-		$prefix   = trim( apply_filters( 'blmd_share_button_prefix', 'blmd' ) );
-		$prefix_e = esc_attr( $prefix_e );
+		$prefix      = trim( apply_filters( 'blmd_share_button_prefix', 'blmd' ) );
+		$classes_btn = apply_filters( 'blmd_share_button_classes', '' );
+		$prefix_e    = esc_attr( $prefix_e );
 		$html = '';
 		if ($atts['type'] == 'twitter') {
-			$html = sprintf( '<button type="button" class="%1$s %2$s" style="background-color: #55acee; color: #fff;" data-url="%3$s" data-text="%4$s" data-via="%5$s"><span class="icon-twitter"></span>%6$s</button>',
+			$html = sprintf( '<button type="button" class="%1$s %2$s %3$s" style="background-color: #55acee; color: #fff;" data-url="%4$s" data-text="%5$s" data-via="%6$s"><span class="icon-twitter"></span>%7$s</button>',
 				esc_attr( "{$prefix}-share-button" ),
 				esc_attr( "{$prefix}-share-button-twitter" ),
+				esc_attr( $classes_btn ),
 				esc_attr( $atts['url'] ),
 				esc_attr( $atts['text'] ),
 				esc_attr( $atts['via'] ),
@@ -1313,9 +1315,10 @@ EOS;
 			);
 		}
 		elseif ($atts['type'] == 'facebook') {
-			$html = sprintf('<button type="button" class="%1$s %2$s" style="background-color: #3b5998; color: #fff;" data-url="%3$s" data-text="%4$s" data-via="%5$s"><span class="icon-facebook"></span>%6$s</button>',
+			$html = sprintf('<button type="button" class="%1$s %2$s %3$s" style="background-color: #3b5998; color: #fff;" data-url="%4$s" data-text="%5$s" data-via="%6$s"><span class="icon-facebook"></span>%7$s</button>',
 			esc_attr( "{$prefix}-share-button" ),
 			esc_attr( "{$prefix}-share-button-facebook" ),
+			esc_attr( $classes_btn ),
 			esc_attr( $atts['url'] ),
 			esc_attr( $atts['text'] ),
 			esc_attr( $atts['via'] ),
