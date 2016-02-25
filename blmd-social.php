@@ -667,6 +667,14 @@ class BLMD_Social {
 			echo '<p><strong>BLMD Social error.</strong> For Twitter counts to work, set the option <em>blmd_social_twitter_counts_url</em>.</p>';
 			echo '</div>';
 		}
+
+		if ( !defined( 'CMB2_LOADED' ) ) {
+			echo '<div class="error">';
+			echo '<p><strong>CMB2 Error.</strong> For enhanced functionality, install the <a href="https://wordpress.org/plugins/cmb2/" target="_blank">CMB2</a> plugin.</p>';
+			echo '</div>';
+		}
+
+
 	}
 
 	// public function cmb2_meta_box_url( $url ) {
