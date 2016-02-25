@@ -670,7 +670,7 @@ class BLMD_Social {
 
 		if ( !defined( 'CMB2_LOADED' ) ) {
 			echo '<div class="error">';
-			echo '<p><strong>CMB2 Error.</strong> For enhanced functionality, install the <a href="https://wordpress.org/plugins/cmb2/" target="_blank">CMB2</a> plugin.</p>';
+			echo '<p><strong>BLMD Social error.</strong> For enhanced functionality, install the <a href="https://wordpress.org/plugins/cmb2/" target="_blank">CMB2</a> plugin.</p>';
 			echo '</div>';
 		}
 
