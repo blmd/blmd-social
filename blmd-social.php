@@ -41,9 +41,10 @@ abstract class ShareaholicShareCount {
   }
 
   public static function get_services_config() {
+    $fb_access_token = get_option( 'blmd_social_fb_access_token' );
     return array(
       'facebook' => array(
-        'url' => 'https://graph.facebook.com/?id=%s',
+        'url' => 'https://graph.facebook.com/?id=%s'.($fb_access_token ? '&access_token='.urlencode($fb_access_token) : ''),
         'method' => 'GET',
         'timeout' => 3,  // in number of seconds
         'callback' => 'facebook_count_callback',
