@@ -198,7 +198,7 @@ abstract class ShareaholicShareCount {
       return false;
     }
     $body = json_decode($response['body'], true);
-    return isset($body['shares']) ? intval($body['shares']) : false;
+    return isset($body['share']['share_count']) ? intval($body['share']['share_count']) : false;
   }
 
 
