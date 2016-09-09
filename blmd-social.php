@@ -5,14 +5,14 @@ Plugin URI: https://github.com/blmd/blmd-social
 Description: Social shares
 Author: blmd
 Author URI: https://github.com/blmd
-Version: 0.9
+Version: 0.10
 
 GitHub Plugin URI: https://github.com/blmd/blmd-social
 
 */
 
 !defined( 'ABSPATH' ) && die;
-define( 'BLMD_SOCIAL_VERSION', '0.9' );
+define( 'BLMD_SOCIAL_VERSION', '0.10' );
 define( 'BLMD_SOCIAL_URL', plugin_dir_url( __FILE__ ) );
 define( 'BLMD_SOCIAL_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BLMD_SOCIAL_BASENAME', plugin_basename( __FILE__ ) );
